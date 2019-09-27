@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Currency Converter</title>
+</head>
+
+<body>
+    <style>
+        * {
+            text-align: center;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background: url('https://activejunky-cdn.s3.amazonaws.com/prod/generic_store_background.jpg') center center;
+        }
+
+        .container {
+            margin-top: 25vh;
+            width: 30em;
+        }
+
+        .header {
+            display: inline-block;
+            background-color: crimson;
+            text-transform: uppercase;
+            border: none;
+            outline: none;
+            padding: 0.2em 1em;
+            border-radius: 0.2875em;
+            font-size: 2em;
+            text-align: center;
+            cursor: pointer;
+            margin: 2vh auto;
+        }
+
+        h3 {
+            color: greenyellow;
+            margin: 0 auto;
+        }
+
+        #results {
+            color: orangered;
+        }
+
+        .currency {
+            width: 10em;
+        }
+        .card{
+            border-radius: 2em;
+            background-color: aquamarine
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            /* display: none; <- Crashes Chrome on hover */
+            -webkit-appearance: none;
+            margin: 0;
+            /* <-- Apparently some margin are still there even though it's hidden */
+        }
+        #exchange{
+            border-radius: 0.3em;
+            background-color: yellow;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+            /* Firefox */
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/ef1dba640f.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <button class="header">
+                    <h3><b>Currency Converter</b></h3>
+                </button>
+                <div class="input-group mb-3 input">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)"
+                        placeholder="Currency Value" type="number" id="fromValue">
+                    <div class="input-group-append">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                </div>
+                <label>
+                    <select class="currency browser-default custom-select" id="from">
+                        <option value="USD">Dollar US</option>
+                        <option value="EUR">Euro</option>
+                        <option value="GBP">Dollar Hong Kong</option>
+                        <option value="IDR">Indonesia</option>
+                        <option value="RUB">Russia</option>
+                        <option value="JPY">Japan Yen</option>
+                        <option value="NOK">Curon Na Uy</option>
+                        <option value="PLN">Zloty Ba Lan</option>
+                    </select>
+                    <button id="exchange"><i class="fas fa-exchange-alt"></i></button>
+                    <select class="currency browser-default custom-select" id="to">
+                        <option value="USD">Dollar US</option>
+                        <option value="EUR">Euro</option>
+                        <option value="GBP">Dollar Hong Kong</option>
+                        <option value="IDR">Indonesia</option>                    
+                        <option value="RUB">Russia</option>
+                        <option value="JPY">Japan Yen</option>
+                        <option value="NOK">Curon Na Uy</option>
+                        <option value="PLN">Zloty Ba Lan</option>
+                    </select>
+                </label>
+                <br />
+                <br />
+                <div class="input-group mb-3 input">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                    </div>
+                    <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)"
+                        placeholder="result" type="number" id="results">
+                    <div class="input-group-append">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function CurrencyAPI() {
+                $("#results").html("Sending data...")
+                var from = $('#from').val()
+                var to = $('#to').val()
+                const request = "https://api.ratesapi.io/api/latest?base=" + from + "&symbols=" + to;
+                console.log(request)
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', request);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText)
+                        var fromValue = $("#fromValue").val()
+                        var toValue = response.rates[to] * fromValue
+                        $("#results").val(toValue.toFixed(2))
+                    }
+                    else {
+                        alert('Request failed.  Returned status of ' + xhr.status);
+                    }
+                };
+                xhr.send();
+            }
+            $('#fromValue').keydown(CurrencyAPI)
+            $('#from').change(CurrencyAPI)
+            $('#to').change(CurrencyAPI)
+            $('#exchange').click(function () {
+                console.log("click")
+                var tempFrom = $('#from').val()
+                console.log(tempFrom)
+                $('#from').val($('#to').val()).change()
+                $('#to').val(tempFrom).change()
+            })
+        })
+    </script>
+</body>
+
+</html>
