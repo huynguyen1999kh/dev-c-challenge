@@ -1,8 +1,8 @@
 # **dev-c challenge - with coderschool**
 
-<div style="justify-content: center;">
-<h2><i>week 1</i></h2>
-<div>
+<div" style="width:100%">
+<div style="width:100%">
+ <h2><i>week 1</i></h2>
  <table style="width:100%">
 <tr>
     <th> <p align="center">
@@ -14,9 +14,10 @@
        <p align="center">Currency converter</p>
     </p> </th>
 </tr>
+</table>
 </div>
-<h2><i>week 2</i></h2>
-<div>
+<div style="width:100%">
+ <h2><i>week 2</i></h2>
  <table style="width:100%">
 <tr>
     <th> <p align="center">
@@ -28,5 +29,6 @@
        <p align="center">Currency converter</p>
     </p> </th>
 </tr>
+</table>
 </div>
 </div>
