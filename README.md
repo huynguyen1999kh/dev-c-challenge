@@ -1,6 +1,6 @@
 # **dev-c challenge - with coderschool**
 
-<div" style="width:100%">
+<div style="width:100%">
 <div style="width:100%">
  <h2><i>week 1</i></h2>
  <table style="width:100%">
