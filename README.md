@@ -22,11 +22,11 @@
 <tr>
     <th> <p align="center">
        <img src="week2/week2-assignment.gif" display: "block" margin-left="auto" margin-right="auto" width="100%"/>
-       <p align="center">guess game</p>
+       <p align="center">profile</p>
     </p> </th>
     <th> <p align="center">
        <img src="week2/week2-lab.gif" display: "block" margin-left="auto" margin-right="auto" width="100%"/>
-       <p align="center">Currency converter</p>
+       <p align="center">feed</p>
     </p> </th>
 </tr>
 </table>
