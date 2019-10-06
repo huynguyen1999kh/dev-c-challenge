@@ -31,4 +31,19 @@
 </tr>
 </table>
 </div>
+<div style="width:100%">
+ <h2><i>week 3</i></h2>
+ <table style="width:100%">
+<tr>
+    <th> <p align="center">
+       <img src="week3/week3-lab.gif" display: "block" margin-left="auto" margin-right="auto" width="100%"/>
+       <p align="center">currency converter</p>
+    </p> </th>
+    <th> <p align="center">
+       <img src="week3/rock-paper-scissors.gif" display: "block" margin-left="auto" margin-right="auto" width="100%"/>
+       <p align="center">rock-paper-scissors</p>
+    </p> </th>
+</tr>
+</table>
+</div>
 </div>
