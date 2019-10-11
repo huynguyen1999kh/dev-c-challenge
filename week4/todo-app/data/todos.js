@@ -13,7 +13,7 @@ export const todos = [
             },
             {
                 id: 3,
-                content: "better not to be later",
+                content: "better not to be later. better not to be later. better not to be later. better not to be later",
             },
         ],
         isDone: false,

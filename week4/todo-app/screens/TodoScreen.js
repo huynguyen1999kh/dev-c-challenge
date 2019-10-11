@@ -30,7 +30,7 @@ export default class TodoScreen extends React.Component {
                 <Entypo name="plus" size={30} color='#fff'></Entypo>
             </TouchableOpacity>
           </View>
-          <TodoList/>
+          <TodoList navigate={this.props.navigation.navigate}/>
         </View>
       );
   }

@@ -14,7 +14,9 @@ export default class TodoItem extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>{this.state.item.title}</Text>
+                <TouchableOpacity onPress={() => this.props.navigate('TodoDetails', this.state.item)}>
+                    <Text style={styles.title}>{this.state.item.title}</Text>
+                </TouchableOpacity>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity>
                         <View style={styles.status} backgroundColor={this.state.item.isDone ? '#92D04E' : '#E84946'}>

@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import TodoScreen from '../screens/TodoScreen';
 import ReportScreen from '../screens/ReportScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import TodoDetailsScreen from '../screens/TodoDetailsScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -15,6 +16,7 @@ const config = Platform.select({
 const TodoStack = createStackNavigator(
   {
     Todo: TodoScreen,
+    TodoDetails: TodoDetailsScreen,
   },
   config
 );

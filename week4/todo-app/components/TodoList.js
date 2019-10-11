@@ -4,8 +4,8 @@ import { todos } from '../data/todos'
 import TodoItem from './TodoItem'
 
 export default class TodoList extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             todos: todos,
         }
@@ -16,7 +16,8 @@ export default class TodoList extends React.Component {
                 <ScrollView>
                 {
                     this.state.todos.map(todoItem => (
-                        <TodoItem key={todoItem.id} item={todoItem}></TodoItem>
+                        <TodoItem key={todoItem.id} item={todoItem} 
+                        navigate={this.props.navigate}/>
                     ))
                 }
                 </ScrollView>
