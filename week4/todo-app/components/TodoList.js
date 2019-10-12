@@ -10,6 +10,23 @@ export default class TodoList extends React.Component {
             todos: todos,
         }
     }
+    addNewTodo = () => {
+        console.warn("ass")
+        const title = this.props.getNewTodoTitle
+        const todo = {
+            id: this.state.todos.length+1,
+            title: title,
+            jobs: [],
+            isDone: false,
+        }
+        this.setState(prev => {
+            const newTodos = prev.todos
+            newTodos.push(todo)
+            return {
+            todos: newTodos,
+        }})
+        console.warn(todo)
+    }
     render() {
         return (
             <View style={styles.container}>

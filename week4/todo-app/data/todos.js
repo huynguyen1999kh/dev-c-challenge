@@ -6,14 +6,17 @@ export const todos = [
             {
                 id: 1,
                 content: "better doing it fast",
+                check: false,
             },
             {
                 id: 2,
                 content: "do not forget doing",
+                check: true,
             },
             {
                 id: 3,
-                content: "better not to be later. better not to be later. better not to be later. better not to be later",
+                content: "better not to be late. better not to be late. better not to be late. better not to be later",
+                check: false,
             },
         ],
         isDone: false,
@@ -25,14 +28,17 @@ export const todos = [
             {
                 id: 1,
                 content: "better doing it fast",
+                check: true,
             },
             {
                 id: 2,
                 content: "do not forget doing",
+                check: true,
             },
             {
                 id: 3,
                 content: "better not to be later",
+                check: true,
             },
         ],
         isDone: true,
@@ -44,14 +50,17 @@ export const todos = [
             {
                 id: 1,
                 content: "better doing it fast",
+                check: true,
             },
             {
                 id: 2,
                 content: "do not forget doing",
+                check: true,
             },
             {
                 id: 3,
                 content: "better not to be later",
+                check: true,
             },
         ],
         isDone: true,
@@ -63,14 +72,17 @@ export const todos = [
             {
                 id: 1,
                 content: "better doing it fast",
+                check: true,
             },
             {
                 id: 2,
                 content: "do not forget doing",
+                check: false,
             },
             {
                 id: 3,
                 content: "better not to be later",
+                check: true,
             },
         ],
         isDone: false,
@@ -82,14 +94,61 @@ export const todos = [
             {
                 id: 1,
                 content: "better doing it fast",
+                check: true,
             },
             {
                 id: 2,
                 content: "do not forget doing",
+                check: true,
             },
             {
                 id: 3,
                 content: "better not to be later",
+                check: true,
+            },
+        ],
+        isDone: true,
+    },
+    {
+        id: 6,
+        title: "do task 6",
+        jobs: [
+            {
+                id: 1,
+                content: "better doing it fast",
+                check: false,
+            },
+            {
+                id: 2,
+                content: "do not forget doing",
+                check: false,
+            },
+            {
+                id: 3,
+                content: "better not to be later",
+                check: false,
+            },
+        ],
+        isDone: false,
+    },
+    {
+        id: 7,
+        title: "do task 7",
+        jobs: [
+            {
+                id: 1,
+                content: "better doing it fast",
+                check: true,
+            },
+            {
+                id: 2,
+                content: "do not forget doing",
+                check: true,
+            },
+            {
+                id: 3,
+                content: "better not to be later",
+                check: true,
             },
         ],
         isDone: true,

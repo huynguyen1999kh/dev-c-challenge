@@ -9,12 +9,16 @@ export default class TodoItem extends React.Component {
         super(props)
         this.state = {
             item: this.props.item,
+            refresh: this.props.refresh,
         }
     }
     render() {
         return (
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => this.props.navigate('TodoDetails', this.state.item)}>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.navigate('TodoDetails', this.state)
+                        }}>
                     <Text style={styles.title}>{this.state.item.title}</Text>
                 </TouchableOpacity>
                 <View style={styles.buttonContainer}>
