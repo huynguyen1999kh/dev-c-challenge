@@ -1,8 +1,8 @@
 import React from "react";
-import { Image, Text, ScrollView, StyleSheet, View, CheckBox, TextInput, TouchableOpacity } from "react-native";
-import { todos } from '../data/todos'
+import { Text, ScrollView, View, CheckBox, TextInput, TouchableOpacity } from "react-native";
 import { FontAwesome } from '@expo/vector-icons'
 import { Entypo } from '@expo/vector-icons'
+import styles from './TodoDetailsScreenStyle'
 
 export default class TodoDetailsScreen extends React.Component {
     constructor(props) {
@@ -11,6 +11,7 @@ export default class TodoDetailsScreen extends React.Component {
         this.state = {
             inputFocus : false,
             item : item,
+            inputText: "",
         }
     }
     textInputFocused() {
@@ -26,6 +27,10 @@ export default class TodoDetailsScreen extends React.Component {
     checkJob = (job) => {
         const newItem = this.state.item
         newItem.jobs.find(tjob => tjob.id == job.id).check = !job.check
+        this.checkIsDone()
+    }
+    checkIsDone = () => {
+        const newItem = this.state.item
         if (!newItem.jobs.find(job => job.check == false)){
             newItem.isDone = true
         }
@@ -35,7 +40,30 @@ export default class TodoDetailsScreen extends React.Component {
         this.setState({
             item: newItem,
         })
+        this.props.navigation.state.params.refresh()
     }
+    updateInputText = (newText) => {
+        this.setState({
+          inputText: newText,
+        })
+      }
+    addNewTask = async () => {
+        const taskcontent = this.state.inputText
+        if (taskcontent ==="") return
+        const task = {
+          id: this.state.item.jobs.length + 1,
+          content: taskcontent,
+          check: false,
+        }
+        await this.setState(prev => {
+          const newItem = prev.item
+          newItem.jobs.push(task)
+          return {
+            todos: newItem,
+          }
+        })
+        this.checkIsDone()
+      }
     render() {
         return (
             <View style={this.state.inputFocus?styles.containerReverse:styles.container}>
@@ -60,7 +88,6 @@ export default class TodoDetailsScreen extends React.Component {
                                     value={job.check}
                                     onValueChange={() => {
                                         this.checkJob(job)
-                                        this.props.navigation.state.params.refresh()
                                     }}
                                     />
                             </View>
@@ -71,8 +98,11 @@ export default class TodoDetailsScreen extends React.Component {
                     <TextInput style={styles.newTodo}
                         onFocus={this.textInputFocused.bind(this)}
                         onBlur={this.textInputLostFocus.bind(this)}
+                        onChangeText={text => this.updateInputText(text)}
+                        blurOnSubmit={true}
                         placeholder="Add new tasks ..." />
-                    <TouchableOpacity style={styles.newTodoButton}>
+                    <TouchableOpacity style={styles.newTodoButton}
+                        onPress={this.addNewTask}>
                         <Entypo name="plus" size={30} color='#fff'></Entypo>
                     </TouchableOpacity>
                 </View>
@@ -84,88 +114,3 @@ export default class TodoDetailsScreen extends React.Component {
 TodoDetailsScreen.navigationOptions = {
     title: "Details"
 };
-
-const styles = StyleSheet.create({
-    invisible: {
-        display: 'none',
-    },
-    container: {
-        flex: 1,
-        alignContent: 'center',
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-    },
-    containerReverse: {
-        flex: 1,
-        flexDirection: 'column-reverse',
-        alignContent: 'center',
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-    },
-    contentContainer: {
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    title: {
-        fontWeight: '700',
-        fontSize: 25,
-        margin: 10,
-        color: '#5AB3B3',
-        maxWidth: '75%',
-    },
-    titleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    status: {
-        fontSize: 17,
-    },
-    tasks: {
-        color: '#F8BC45',
-        fontSize: 20,
-        fontWeight: '600',
-        alignSelf: 'center',
-        marginBottom: 5,
-    },
-    job: {
-        alignSelf: 'flex-start',
-        maxWidth: '75%',
-        fontSize: 16,
-    },
-    jobContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-    },
-    jobList: {
-        padding: 15,
-        borderColor: '#92D04E',
-        borderWidth: 1,
-        borderRadius: 10,
-        paddingBottom: 15,
-        width: '90%',
-    },
-    newTodoContainer: {
-        flexDirection: 'row',
-        marginBottom: 30,
-        marginTop: 30,
-        alignSelf: 'center',
-    },
-    newTodo: {
-        width: '65%',
-        height: 40,
-        borderBottomWidth: 3,
-        fontSize: 22,
-        borderBottomColor: '#5AB3B3',
-        color: '#5AB3B3',
-    },
-    newTodoButton: {
-        height: 40,
-        width: 40,
-        backgroundColor: '#5AB3B3',
-        borderRadius: 20,
-        marginLeft: 10,
-        alignItems: "center",
-        justifyContent: 'center',
-    },
-});
