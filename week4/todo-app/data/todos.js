@@ -1,29 +1,34 @@
 export const todos = [
     {
         id: 1,
-        title: "do task 1",
+        title: "code todos app by react native",
         jobs: [
             {
                 id: 1,
-                content: "better doing it fast",
+                content: "practice navigation",
                 check: false,
             },
             {
                 id: 2,
-                content: "do not forget doing",
+                content: "try add nice feature",
                 check: true,
             },
             {
                 id: 3,
-                content: "better not to be late. better not to be late. better not to be late. better not to be later",
+                content: "keep the projects clean and tidy, good practice!",
                 check: false,
+            },
+            {
+                id: 4,
+                content: "amazing design!",
+                check: true,
             },
         ],
         isDone: false,
     },
     {
         id: 2,
-        title: "do task 2",
+        title: "finish human computer intergration work",
         jobs: [
             {
                 id: 1,
@@ -32,12 +37,17 @@ export const todos = [
             },
             {
                 id: 2,
-                content: "do not forget doing",
+                content: "focuse on teamworking",
                 check: true,
             },
             {
                 id: 3,
-                content: "better not to be later",
+                content: "write down the process on Trello",
+                check: true,
+            },
+            {
+                id: 4,
+                content: "submit assignment on week 5",
                 check: true,
             },
         ],
@@ -45,21 +55,36 @@ export const todos = [
     },
     {
         id: 3,
-        title: "do task 3",
+        title: "clean the room",
         jobs: [
             {
                 id: 1,
-                content: "better doing it fast",
+                content: "sweeping the room",
                 check: true,
             },
             {
                 id: 2,
-                content: "do not forget doing",
+                content: "clean the floor",
                 check: true,
             },
             {
                 id: 3,
-                content: "better not to be later",
+                content: "tidy the bed",
+                check: true,
+            },
+            {
+                id: 4,
+                content: "wash the blanket",
+                check: true,
+            },
+            {
+                id: 5,
+                content: "dump the trash",
+                check: true,
+            },
+            {
+                id: 6,
+                content: "arrange bookshelves",
                 check: true,
             },
         ],
@@ -67,7 +92,7 @@ export const todos = [
     },
     {
         id: 4,
-        title: "do task 4",
+        title: "finish devices management web",
         jobs: [
             {
                 id: 1,
@@ -76,34 +101,39 @@ export const todos = [
             },
             {
                 id: 2,
-                content: "do not forget doing",
+                content: "focuse on teamworking",
                 check: false,
             },
             {
                 id: 3,
-                content: "better not to be later",
+                content: "write down the process on Trello",
                 check: true,
+            },
+            {
+                id: 4,
+                content: "submit assignment on week 5",
+                check: false,
             },
         ],
         isDone: false,
     },
     {
         id: 5,
-        title: "do task 5",
+        title: "wash the bike",
         jobs: [
             {
                 id: 1,
-                content: "better doing it fast",
+                content: "fix it",
                 check: true,
             },
             {
                 id: 2,
-                content: "do not forget doing",
+                content: "clean it",
                 check: true,
             },
             {
                 id: 3,
-                content: "better not to be later",
+                content: "repair it",
                 check: true,
             },
         ],
@@ -111,21 +141,21 @@ export const todos = [
     },
     {
         id: 6,
-        title: "do task 6",
+        title: "do coderschool tasks",
         jobs: [
             {
                 id: 1,
-                content: "better doing it fast",
+                content: "finish the lab",
                 check: false,
             },
             {
                 id: 2,
-                content: "do not forget doing",
+                content: "submit the assignment",
                 check: false,
             },
             {
                 id: 3,
-                content: "better not to be later",
+                content: "dont forget to update on github",
                 check: false,
             },
         ],
@@ -133,24 +163,29 @@ export const todos = [
     },
     {
         id: 7,
-        title: "do task 7",
+        title: "code todos app by react native",
         jobs: [
             {
                 id: 1,
-                content: "better doing it fast",
-                check: true,
+                content: "practice navigation",
+                check: false,
             },
             {
                 id: 2,
-                content: "do not forget doing",
+                content: "try add nice feature",
                 check: true,
             },
             {
                 id: 3,
-                content: "better not to be later",
+                content: "keep the projects clean and tidy, good practice!",
+                check: false,
+            },
+            {
+                id: 4,
+                content: "amazing design!",
                 check: true,
             },
         ],
-        isDone: true,
+        isDone: false,
     },
 ]

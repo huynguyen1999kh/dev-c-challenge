@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: '700',
         fontSize: 18,
+        maxWidth: 220,
     },
     status: {
         height: 40,
