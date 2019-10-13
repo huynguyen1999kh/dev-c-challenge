@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         paddingHorizontal: 15,
         paddingVertical: 10,
+        backgroundColor: '#F8F8F8'
     },
     containerReverse: {
         flex: 1,

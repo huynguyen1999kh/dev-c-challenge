@@ -28,8 +28,8 @@ TodoStack.navigationOptions = {
       focused={focused}
       name={
         Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+          ? `ios-list-box'}`
+          : 'md-list-box'
       }
     />
   ),
@@ -47,7 +47,7 @@ const ReportStack = createStackNavigator(
 ReportStack.navigationOptions = {
   tabBarLabel: 'Report',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-stats' : 'md-stats'} />
   ),
 };
 
@@ -72,7 +72,6 @@ SettingsStack.path = '';
 const tabNavigator = createBottomTabNavigator({
   TodoStack,
   ReportStack,
-  SettingsStack,
 });
 
 tabNavigator.path = '';

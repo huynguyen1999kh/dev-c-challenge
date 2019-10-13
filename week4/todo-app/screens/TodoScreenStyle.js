@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 30,
         paddingBottom: 5,
+        backgroundColor: '#F8F8F8',
     },
     newTodoContainer: {
         flexDirection: 'row',
