@@ -7,6 +7,7 @@ import {
   createStackNavigator,
   createMaterialTopTabNavigator,
   createAppContainer,
+  createSwitchNavigator,
 } from 'react-navigation';
 
 
@@ -41,6 +42,13 @@ const TabScreen = createMaterialTopTabNavigator(
   }
 );
 
+const switchNavigator = createSwitchNavigator({
+  // You could add another route here for authentication.
+  // Read more at https://reactnavigation.org/docs/en/auth-flow.html
+  switch: TabScreen,
+  //Inner: ReportTabNavigator,
+});
+
 const TabApp = createStackNavigator({
   TabScreen: {
     screen: TabScreen,
@@ -53,4 +61,4 @@ const TabApp = createStackNavigator({
     // },
   },
 });
-export default createAppContainer(TabScreen);
+export default createAppContainer(switchNavigator);

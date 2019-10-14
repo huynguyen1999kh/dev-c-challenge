@@ -1,14 +1,21 @@
 import React from "react";
 import { ScrollView, StyleSheet, View, Picker, Text } from "react-native";
 import PieChart from 'react-native-pie-chart';
-import { todos } from '../data/todos'
 import TabApp from '../navigation/ReportTabNavigator';
+import { withNavigationFocus } from 'react-navigation';
 
-export default class ReportsScreen extends React.Component {
+class ReportsScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      todos: todos,
+      todos: props.screenProps.todos,
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.isFocused !== this.props.isFocused) {
+      this.setState({
+        somethingToRender: 0,
+      })
     }
   }
   render() {
@@ -43,7 +50,7 @@ export default class ReportsScreen extends React.Component {
           />
           <Text style={styles.done}>Done</Text>
         </View>
-        <TabApp todos={this.state.todos}/>
+        <TabApp screenProps={{ todos: this.state.todos }}/>
       </View>
     )
   }
@@ -52,6 +59,8 @@ export default class ReportsScreen extends React.Component {
 ReportsScreen.navigationOptions = {
   title: "Reports"
 };
+
+export default withNavigationFocus(ReportsScreen);
 
 const styles = StyleSheet.create({
   container: {

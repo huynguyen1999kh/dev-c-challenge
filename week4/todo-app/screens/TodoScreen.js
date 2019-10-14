@@ -6,16 +6,16 @@ import {
   View
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
-import { todos } from "../data/todos";
 import TodoItem from "../components/TodoItem";
 import styles from './TodoScreenStyle'
+import { withNavigationFocus } from 'react-navigation';
 
-export default class TodoScreen extends React.Component {
+class TodoScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       inputText: "",
-      todos: todos
+      todos: props.screenProps.todos,
     };
     this.userInput = null;
     this.scrollView = null;
@@ -59,6 +59,7 @@ export default class TodoScreen extends React.Component {
     });
   }
   render() {
+    //this.props.navigation.navigate(rou)
     return (
       <View style={styles.container}>
         <View style={styles.newTodoContainer}>
@@ -102,3 +103,5 @@ export default class TodoScreen extends React.Component {
 TodoScreen.navigationOptions = {
   title: "Todos"
 };
+
+export default withNavigationFocus(TodoScreen);

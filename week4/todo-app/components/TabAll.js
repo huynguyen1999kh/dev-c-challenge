@@ -1,14 +1,13 @@
 import React from 'react';
 import { View, Text , StyleSheet} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
-import {todos} from '../data/todos'
 
 export default class TabAll extends React.Component {
     constructor(props){
         super(props)
         
         this.state = {
-            todos: todos,
+            todos: props.screenProps.todos,
             isTodos: true,
         }
     }
