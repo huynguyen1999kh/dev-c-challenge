@@ -1,0 +1,1 @@
+export const gooogleAPI = '0cd20c6c55dc40f5a10607994fda65f8'

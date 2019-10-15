@@ -1,198 +1,176 @@
-import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Text, FlatList, Linking } from 'react-native'
+import { gooogleAPI } from '../constants/APIkeys'
+import moment from 'moment';
+import { Card, Button } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 
-import { MonoText } from '../components/StyledText';
-
-export default function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
-
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Get started by opening</Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change this text and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text>
-
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MonoText>
-        </View>
+export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      isLoading: true,
+      listArc: [],
+      pageNumber: 1,
+      hasError: false,
+      lastPageReached: false,
+    }
+  }
+  componentDidMount() {
+    this.getNews()
+  }
+  getNews = async () => {
+    if (this.state.lastPageReached) return
+    try {
+      const response = await fetch(
+        'https://newsapi.org/v2/top-headlines?country=us&apiKey=' + gooogleAPI + '&page=' + this.state.pageNumber
+      );
+      const data = await response.json()
+      const hasMoreArticles = data.articles.length > 0;
+      if (!hasMoreArticles) {
+        this.setState({
+          lastPageReached: true,
+        })
+        return
+      }
+      await this.setState(prev => ({
+        isLoading: false,
+        pageNumber: prev.pageNumber + 1,
+        listArc: this.filterForUniqueArticles(prev.listArc.concat(data.articles)),
+      }))
+    }
+    catch (err) {
+      this.setState({
+        hasError: true,
+      })
+    }
+  };
+  filterForUniqueArticles = arr => {
+    const cleaned = [];
+    arr.forEach(itm => {
+      let unique = true;
+      cleaned.forEach(itm2 => {
+        const isEqual = JSON.stringify(itm) === JSON.stringify(itm2);
+        if (isEqual) unique = false;
+      });
+      if (unique) cleaned.push(itm);
+    });
+    return cleaned;
+  };
+  renderArticle = ({ item }) => (
+    <Card title={item.title} image={{ uri: item.urlToImage }}>
+      <View style={styles.row}>
+        <Text style={styles.label}>Source</Text>
+        <Text style={styles.info}>{item.source.name}</Text>
       </View>
-    </View>
-  );
+      <Text>{item.content}</Text>
+      <View style={styles.row}>
+        <Text style={styles.label}>Published</Text>
+        <Text style={styles.info}>
+          {moment(item.publishedAt).format('LLL')}
+        </Text>
+      </View>
+      <Button icon={<Icon />} title="Read more" backgroundColor="#03A9F4"
+        onPress={() => this.readMore(item.url)} />
+    </Card>
+  )
+  readMore = url => {
+    Linking.canOpenURL(url).then(supported => {
+      if (supported) {
+        Linking.openURL(url);
+      } else {
+        console.log(`Don't know how to open URL: ${url}`);
+      }
+    });
+  };
+  render() {
+    if (this.state.hasError) {
+      return (
+        <Text style={styles.error}>Some errors has occurred</Text>
+      )
+    }
+    if (this.state.isLoading){
+      return (
+        <ActivityIndicator style={styles.loader} size="large" loading={this.state.isLoading} />
+      )
+      // else {
+      //   return (
+      //     <Text style={styles.error}>No more articles</Text>
+      //   )
+      // }
+    }
+    return (
+      <View style={styles.container}>
+        <View style={styles.row}>
+          <Text style={styles.label}>Articles Count:</Text>
+          <Text style={styles.info}>{this.state.listArc.length}</Text>
+        </View>
+        <FlatList
+          data={this.state.listArc}
+          renderItem={this.renderArticle}
+          keyExtractor={item => item.title}
+          onEndReached={this.getNews}
+          onEndReachedThreshold={1}
+          ListFooterComponent={this.state.lastPageReached?
+            <Text style={styles.end}>No more articles</Text>: 
+            <ActivityIndicator size="large" loading={this.setState.isLoading} />} />
+      </View>
+    );
+  }
 }
 
 HomeScreen.navigationOptions = {
   header: null,
 };
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use
-        useful development tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
-  );
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
-}
-
 const styles = StyleSheet.create({
+  error: {
+    fontSize: 20,
+    fontWeight: '600',
+    alignSelf: 'center',
+    position: 'absolute',
+    color: 'red',
+    top: '50%',
+  },
+  end: {
+    fontSize: 20,
+    fontWeight: '500',
+    alignSelf: 'center',
+    marginVertical: 10,
+  },
+  loader: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '50%',
+  },
+  containerFlex: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   container: {
     flex: 1,
+    marginTop: 40,
+    alignItems: 'center',
     backgroundColor: '#fff',
+    justifyContent: 'center'
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+  header: {
+    height: 30,
+    width: '100%',
+    backgroundColor: 'pink'
   },
-  contentContainer: {
-    paddingTop: 30,
+  row: {
+    flexDirection: 'row'
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+  label: {
+    fontSize: 16,
+    color: 'black',
+    marginRight: 10,
+    fontWeight: 'bold'
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
+  info: {
+    fontSize: 16,
+    color: 'grey'
+  }
 });
