@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, ActivityIndicator, StyleSheet, Text, FlatList, Linking } from 'react-native'
+import { View, ActivityIndicator, Text, FlatList, Linking, Platform, Image, TouchableOpacity } from 'react-native'
 import { gooogleAPI } from '../constants/APIkeys'
 import moment from 'moment';
 import { Card, Button } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
+import styles from '../style/HomeScreenStyle'
+import { TextInput } from 'react-native-gesture-handler';
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -28,9 +30,10 @@ export default class HomeScreen extends React.Component {
       const data = await response.json()
       const hasMoreArticles = data.articles.length > 0;
       if (!hasMoreArticles) {
-        this.setState({
+        await this.setState({
           lastPageReached: true,
-        })
+        },
+        )
         return
       }
       await this.setState(prev => ({
@@ -93,14 +96,18 @@ export default class HomeScreen extends React.Component {
       return (
         <ActivityIndicator style={styles.loader} size="large" loading={this.state.isLoading} />
       )
-      // else {
-      //   return (
-      //     <Text style={styles.error}>No more articles</Text>
-      //   )
-      // }
     }
     return (
       <View style={styles.container}>
+        <View style={styles.head}>
+          <TouchableOpacity>
+            <Icon name={Platform.OS === 'ios'? 'ios-search' : 'md-search'} type='ionicon'></Icon>
+          </TouchableOpacity>
+          <Image style={styles.headLabel} source={require('../assets/images/headLabel.png')} resizeMode='contain'/>
+          <TouchableOpacity>
+            <Icon name={Platform.OS === 'ios'? 'ios-settings' : 'md-settings'} type='ionicon'></Icon>
+          </TouchableOpacity>
+        </View>
         <View style={styles.row}>
           <Text style={styles.label}>Articles Count:</Text>
           <Text style={styles.info}>{this.state.listArc.length}</Text>
@@ -122,55 +129,3 @@ export default class HomeScreen extends React.Component {
 HomeScreen.navigationOptions = {
   header: null,
 };
-
-const styles = StyleSheet.create({
-  error: {
-    fontSize: 20,
-    fontWeight: '600',
-    alignSelf: 'center',
-    position: 'absolute',
-    color: 'red',
-    top: '50%',
-  },
-  end: {
-    fontSize: 20,
-    fontWeight: '500',
-    alignSelf: 'center',
-    marginVertical: 10,
-  },
-  loader: {
-    position: 'absolute',
-    alignSelf: 'center',
-    top: '50%',
-  },
-  containerFlex: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  container: {
-    flex: 1,
-    marginTop: 40,
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    justifyContent: 'center'
-  },
-  header: {
-    height: 30,
-    width: '100%',
-    backgroundColor: 'pink'
-  },
-  row: {
-    flexDirection: 'row'
-  },
-  label: {
-    fontSize: 16,
-    color: 'black',
-    marginRight: 10,
-    fontWeight: 'bold'
-  },
-  info: {
-    fontSize: 16,
-    color: 'grey'
-  }
-});
