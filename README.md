@@ -61,4 +61,19 @@
 </tr>
 </table>
 </div>
+<div style="width:100%">
+ <h2><i>week 5</i></h2>
+ <table style="width:100%">
+<tr>
+    <th> <p align="center">
+<!--        <img src="week4/messager_full.gif" display: "block" margin-left="auto" margin-right="auto" width="100%"/>
+       <p align="center">messager</p> -->
+    </p> </th>
+    <th> <p align="center">
+       <img src="week5/google-news.gif" display: "block" margin-left="auto" margin-right="auto" width="100%"/>
+       <p align="center">google-news(on working)</p>
+    </p> </th>
+</tr>
+</table>
+</div>
 </div>
