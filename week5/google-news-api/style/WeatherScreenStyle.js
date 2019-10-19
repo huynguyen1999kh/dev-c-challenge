@@ -5,11 +5,10 @@ export default styles = StyleSheet.create({
       flex: 1,
       width: "100%",
       height: "100%",
-      backgroundColor: "black"
     },
     container: {
       alignItems: "center",
-      justifyContent: "center"
+      justifyContent: "center",
     },
     weatherContainer: {
       padding: 20,
@@ -17,7 +16,7 @@ export default styles = StyleSheet.create({
       borderWidth: 1,
       maxWidth: "90%",
       minHeight: "20%",
-      marginTop: "70%",
+      marginTop: "2%",
       borderRadius: 25,
       marginBottom: "2%",
       borderColor: "white",
@@ -70,9 +69,9 @@ export default styles = StyleSheet.create({
       textDecorationLine: "underline"
     },
     loading: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center"
+      position: 'absolute',
+      alignSelf: 'center',
+      top: '50%',
     },
     currentLocation: {
       margin: 3,
@@ -85,5 +84,5 @@ export default styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: "rgba(20,33,61,0.6)"
-    }
+    },
   });

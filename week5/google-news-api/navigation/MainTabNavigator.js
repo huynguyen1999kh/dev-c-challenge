@@ -5,7 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/WeatherScreen';
+import WeatherScreen from '../screens/WeatherScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -15,6 +15,7 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
+    Weather: WeatherScreen,
   },
   config
 );
@@ -50,26 +51,27 @@ LinksStack.navigationOptions = {
 };
 
 LinksStack.path = '';
-
-const SettingsStack = createStackNavigator(
+//
+const WeatherStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    Weather: WeatherScreen,
   },
   config
 );
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+WeatherStack.navigationOptions = {
+  tabBarLabel: 'Weather',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
   ),
 };
 
-SettingsStack.path = '';
-
+WeatherStack.path = '';
+//
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
+  WeatherStack,
 });
 
 tabNavigator.path = '';

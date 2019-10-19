@@ -43,7 +43,6 @@ export default styles = StyleSheet.create({
     label: {
       fontSize: 16,
       color: 'black',
-      marginRight: 10,
       fontWeight: 'bold'
     },
     info: {
@@ -62,6 +61,26 @@ export default styles = StyleSheet.create({
     },
     invisible: {
         display: 'none',
+    },
+    article: {
+      width:'100%', 
+      paddingHorizontal: 20,
+      paddingVertical: 20,
+      borderColor: '#f2f2f2',
+      borderBottomWidth: 1,
+    },
+    articleImg: {
+      width: 130,
+      height: 130,
+      resizeMode: 'cover',
+      borderRadius: 20,
+    },
+    title: {
+      flex: 1,
+      fontSize: 16,
+      color: 'black',
+      marginRight: 10,
+      fontWeight: 'bold',
     }
   });
   

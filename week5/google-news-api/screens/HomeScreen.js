@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, ActivityIndicator, Text, FlatList, Linking, Platform, Image, TouchableOpacity } from 'react-native'
+import { View, ActivityIndicator, Text, FlatList, Linking, Platform, Image, TouchableOpacity, TextInput } from 'react-native'
 import { gooogleAPI } from '../constants/APIkeys'
 import moment from 'moment';
 import { Card, Button } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
 import styles from '../style/HomeScreenStyle'
-import { TextInput } from 'react-native-gesture-handler';
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
+import { getWeatherIcon } from '../data/cities'
+import WeatherStatus from '../components/WeatherStatus';
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -16,6 +19,12 @@ export default class HomeScreen extends React.Component {
       pageNumber: 1,
       hasError: false,
       lastPageReached: false,
+      location: {
+        name: "saigon",
+        weather: [{ main: "", description: "" }],
+      },
+      loadLocation: true,
+      errorLocation: false,
     }
   }
   componentDidMount() {
@@ -46,6 +55,7 @@ export default class HomeScreen extends React.Component {
       this.setState({
         hasError: true,
       })
+      console.warn(err)
     }
   };
   filterForUniqueArticles = arr => {
@@ -61,21 +71,23 @@ export default class HomeScreen extends React.Component {
     return cleaned;
   };
   renderArticle = ({ item }) => (
-    <Card title={item.title} image={{ uri: item.urlToImage }}>
+    <View style={styles.article}>
       <View style={styles.row}>
-        <Text style={styles.label}>Source</Text>
-        <Text style={styles.info}>{item.source.name}</Text>
+        <View style={{flex: 1}}>
+          <Text style={styles.title}>{item.title.split(' - ')[0]}</Text>
+          <Text style={styles.info}>{item.source.name}</Text>
+        </View>
+        <Image style={styles.articleImg} source={{ uri: item.urlToImage }}></Image>
       </View>
-      <Text>{item.content}</Text>
+      <Text style={{marginVertical: 10}}>{item.content}</Text>
       <View style={styles.row}>
-        <Text style={styles.label}>Published</Text>
         <Text style={styles.info}>
           {moment(item.publishedAt).format('LLL')}
         </Text>
       </View>
       <Button icon={<Icon />} title="Read more" backgroundColor="#03A9F4"
         onPress={() => this.readMore(item.url)} />
-    </Card>
+    </View>
   )
   readMore = url => {
     Linking.canOpenURL(url).then(supported => {
@@ -92,7 +104,7 @@ export default class HomeScreen extends React.Component {
         <Text style={styles.error}>Some errors has occurred</Text>
       )
     }
-    if (this.state.isLoading){
+    if (this.state.isLoading) {
       return (
         <ActivityIndicator style={styles.loader} size="large" loading={this.state.isLoading} />
       )
@@ -101,25 +113,27 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.head}>
           <TouchableOpacity>
-            <Icon name={Platform.OS === 'ios'? 'ios-search' : 'md-search'} type='ionicon'></Icon>
+            <Icon name={Platform.OS === 'ios' ? 'ios-search' : 'md-search'} type='ionicon'></Icon>
           </TouchableOpacity>
-          <Image style={styles.headLabel} source={require('../assets/images/headLabel.png')} resizeMode='contain'/>
+          <Image style={styles.headLabel} source={require('../assets/images/headLabel.png')} resizeMode='contain' />
           <TouchableOpacity>
-            <Icon name={Platform.OS === 'ios'? 'ios-settings' : 'md-settings'} type='ionicon'></Icon>
+            <Icon name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'} type='ionicon'></Icon>
           </TouchableOpacity>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Articles Count:</Text>
+          <Text style={styles.label}>Articles Count: </Text>
           <Text style={styles.info}>{this.state.listArc.length}</Text>
         </View>
         <FlatList
+          style={{ width: '100%' }}
           data={this.state.listArc}
           renderItem={this.renderArticle}
           keyExtractor={item => item.title}
           onEndReached={this.getNews}
           onEndReachedThreshold={1}
-          ListFooterComponent={this.state.lastPageReached?
-            <Text style={styles.end}>No more articles</Text>: 
+          ListHeaderComponent={<WeatherStatus navigate={this.props.navigation.navigate}/>}
+          ListFooterComponent={this.state.lastPageReached ?
+            <Text style={styles.end}>No more articles</Text> :
             <ActivityIndicator size="large" loading={this.setState.isLoading} />} />
       </View>
     );
