@@ -51,27 +51,10 @@ LinksStack.navigationOptions = {
 };
 
 LinksStack.path = '';
-//
-const WeatherStack = createStackNavigator(
-  {
-    Weather: WeatherScreen,
-  },
-  config
-);
 
-WeatherStack.navigationOptions = {
-  tabBarLabel: 'Weather',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
-  ),
-};
-
-WeatherStack.path = '';
-//
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  WeatherStack,
 });
 
 tabNavigator.path = '';

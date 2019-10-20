@@ -9,6 +9,7 @@ import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import { getWeatherIcon } from '../data/cities'
 import WeatherStatus from '../components/WeatherStatus';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default class HomeScreen extends React.Component {
   constructor(props) {
@@ -25,6 +26,8 @@ export default class HomeScreen extends React.Component {
       },
       loadLocation: true,
       errorLocation: false,
+      searchLine: '',
+      onSearch: false,
     }
   }
   componentDidMount() {
@@ -33,9 +36,11 @@ export default class HomeScreen extends React.Component {
   getNews = async () => {
     if (this.state.lastPageReached) return
     try {
-      const response = await fetch(
+      const response = await (this.state.searchLine.trim() == '' ? fetch(
         'https://newsapi.org/v2/top-headlines?country=us&apiKey=' + gooogleAPI + '&page=' + this.state.pageNumber
-      );
+      ) : fetch(
+        'https://newsapi.org/v2/everything?q=' + this.state.searchLine + '&apiKey=' + gooogleAPI + '&page=' + this.state.pageNumber
+      ))
       const data = await response.json()
       const hasMoreArticles = data.articles.length > 0;
       if (!hasMoreArticles) {
@@ -73,17 +78,22 @@ export default class HomeScreen extends React.Component {
   renderArticle = ({ item }) => (
     <View style={styles.article}>
       <View style={styles.row}>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <Text style={styles.title}>{item.title.split(' - ')[0]}</Text>
           <Text style={styles.info}>{item.source.name}</Text>
         </View>
         <Image style={styles.articleImg} source={{ uri: item.urlToImage }}></Image>
       </View>
-      <Text style={{marginVertical: 10}}>{item.content}</Text>
+      <Text style={{ marginVertical: 10 }}>{item.content}</Text>
       <View style={styles.row}>
-        <Text style={styles.info}>
-          {moment(item.publishedAt).format('LLL')}
-        </Text>
+        <View style={styles.timeContainer}>
+          <Text style={styles.info}>
+            {moment(item.publishedAt).format('LLL')}
+          </Text>
+          <TouchableOpacity>
+            <FontAwesome size={30} name="bookmark" color="#333"></FontAwesome>
+          </TouchableOpacity>
+        </View>
       </View>
       <Button icon={<Icon />} title="Read more" backgroundColor="#03A9F4"
         onPress={() => this.readMore(item.url)} />
@@ -96,8 +106,33 @@ export default class HomeScreen extends React.Component {
       } else {
         console.log(`Don't know how to open URL: ${url}`);
       }
-    });
+    }); 
   };
+  onSearching = async () => {
+    if (!this.state.onSearch) {
+      this.setState({
+        onSearch: true,
+      })
+      this.refs.myInput.focus()
+    }
+    else {
+      this.setState({
+        onSearch: false,
+      })
+    }
+  }
+  endSearch = async () => {
+    this.setState({
+      onSearch: false,
+    })
+  }
+  searchNews = async () => {
+    await this.setState({
+      pageNumber: 1,
+      listArc: [],
+    })
+    this.getNews()
+  }
   render() {
     if (this.state.hasError) {
       return (
@@ -112,7 +147,7 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.head}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => this.onSearching()}>
             <Icon name={Platform.OS === 'ios' ? 'ios-search' : 'md-search'} type='ionicon'></Icon>
           </TouchableOpacity>
           <Image style={styles.headLabel} source={require('../assets/images/headLabel.png')} resizeMode='contain' />
@@ -120,9 +155,16 @@ export default class HomeScreen extends React.Component {
             <Icon name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'} type='ionicon'></Icon>
           </TouchableOpacity>
         </View>
+        <TextInput style={this.state.onSearch ? styles.searchText : styles.invisible}
+          ref="myInput"
+          blurOnSubmit={true}
+          onChangeText={text => this.setState({ searchLine: text })}
+          onSubmitEditing={() => this.searchNews()}
+          onBlur={() => this.endSearch()}
+          placeholder="search news" />
         <View style={styles.row}>
-          <Text style={styles.label}>Articles Count: </Text>
-          <Text style={styles.info}>{this.state.listArc.length}</Text>
+          <Text style={styles.label}>{this.state.searchLine.trim() == '' ? 'Healines' : this.state.searchLine} </Text>
+          {!this.state.onSearch && <Text style={styles.info}>({this.state.listArc.length})</Text>}
         </View>
         <FlatList
           style={{ width: '100%' }}
@@ -131,11 +173,11 @@ export default class HomeScreen extends React.Component {
           keyExtractor={item => item.title}
           onEndReached={this.getNews}
           onEndReachedThreshold={1}
-          ListHeaderComponent={<WeatherStatus navigate={this.props.navigation.navigate}/>}
+          ListHeaderComponent={<View><WeatherStatus navigate={this.props.navigation.navigate} /></View>}
           ListFooterComponent={this.state.lastPageReached ?
-            <Text style={styles.end}>No more articles</Text> :
+            <Text style={styles.end}>{this.state.listArc.length == 0 ? 'No results for ' + this.state.searchLine : 'No more articles'}</Text> :
             <ActivityIndicator size="large" loading={this.setState.isLoading} />} />
-      </View>
+      </View> 
     );
   }
 }
