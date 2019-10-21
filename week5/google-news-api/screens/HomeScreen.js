@@ -2,12 +2,9 @@ import React from 'react';
 import { View, ActivityIndicator, Text, FlatList, Linking, Platform, Image, TouchableOpacity, TextInput } from 'react-native'
 import { gooogleAPI } from '../constants/APIkeys'
 import moment from 'moment';
-import { Card, Button } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
 import styles from '../style/HomeScreenStyle'
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
-import { getWeatherIcon } from '../data/cities'
 import WeatherStatus from '../components/WeatherStatus';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -75,7 +72,7 @@ export default class HomeScreen extends React.Component {
     });
     return cleaned;
   };
-  renderArticle = ({ item }) => (
+  renderArticle = ({ item ,index}) => (
     <View style={styles.article}>
       <View style={styles.row}>
         <View style={{ flex: 1 }}>
@@ -122,7 +119,7 @@ export default class HomeScreen extends React.Component {
     }
   }
   endSearch = async () => {
-    this.setState({
+    await this.setState({
       onSearch: false,
     })
   }
@@ -130,6 +127,7 @@ export default class HomeScreen extends React.Component {
     await this.setState({
       pageNumber: 1,
       listArc: [],
+      onSearch: false,
     })
     this.getNews()
   }
@@ -170,9 +168,10 @@ export default class HomeScreen extends React.Component {
           style={{ width: '100%' }}
           data={this.state.listArc}
           renderItem={this.renderArticle}
-          keyExtractor={item => item.title}
+          keyExtractor={(item,index) => (item.title+index)}
           onEndReached={this.getNews}
           onEndReachedThreshold={1}
+          extraData={this.state.listArc}
           ListHeaderComponent={<View><WeatherStatus navigate={this.props.navigation.navigate} /></View>}
           ListFooterComponent={this.state.lastPageReached ?
             <Text style={styles.end}>{this.state.listArc.length == 0 ? 'No results for ' + this.state.searchLine : 'No more articles'}</Text> :

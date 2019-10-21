@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, ActivityIndicator, Text, FlatList, Linking, Platform, Image, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
-import { gooogleAPI } from '../constants/APIkeys'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import { getWeatherIcon } from '../data/cities'
